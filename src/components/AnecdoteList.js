@@ -1,6 +1,6 @@
 import React from 'react'
 import { useDispatch, useSelector } from 'react-redux'
-import { clearNotification } from '../reducers/notificationReducer'
+import { clearNotification, setNotification } from '../reducers/notificationReducer'
 import { voteAnecdote } from '../reducers/anecdoteReducer'
 
 const filterAnecdotes = (filter, anecdotes) => {
@@ -17,10 +17,6 @@ const AnecdoteList = (props) => {
     console.log('vote', anecdote.id)
     console.log('FullAnecdote: ', anecdote)
     dispatch(voteAnecdote(anecdote))
-    // dispatch({ 
-    //   type: 'VOTE',
-    //   id: id, 
-    // })
     setTimeout(() => dispatch(clearNotification()), 5000)
   }
 

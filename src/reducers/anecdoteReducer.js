@@ -1,5 +1,4 @@
 import anecdoteService from '../services/anecdotes'
-import { setNotification } from '../reducers/notificationReducer'
 
 const anecdotesAtStart = [
   'If it hurts, do it more often',
@@ -32,7 +31,9 @@ export const voteAnecdote = (anecdote) => {
     console.log('UpdateResponse: ', response)
     dispatch({
       type: 'VOTE',
+      content: response.content,
       id: response.id,
+      votes: response.votes,
     })
   }
 }

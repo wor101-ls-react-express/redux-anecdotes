@@ -5,20 +5,32 @@ export const clearNotification = () => {
 const notificationReducer = ( state = null, action) => {
   switch (action.type) {
     case 'VOTE':
-      return {
-        type: 'VOTE',
-        id: action.id,
-      }
+      return `You voted for '${action.content}'`
     case 'NEW_ANECDOTE':
-      return {
-        type: 'NEW_ANECDOTE',
-        id: action.data.id,
-      }
+      return `You created '${action.data.content}'`
     case 'CLEAR_NOTIFICATION':
       return null
     default:
       return state
   }
+
+
+  // switch (action.type) {
+  //   case 'VOTE':
+  //     return {
+  //       type: 'VOTE',
+  //       id: action.id,
+  //     }
+  //   case 'NEW_ANECDOTE':
+  //     return {
+  //       type: 'NEW_ANECDOTE',
+  //       id: action.data.id,
+  //     }
+  //   case 'CLEAR_NOTIFICATION':
+  //     return null
+  //   default:
+  //     return state
+  // }
 }
 
 export default notificationReducer
