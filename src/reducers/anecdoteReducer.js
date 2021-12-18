@@ -1,3 +1,6 @@
+import anecdoteService from '../services/anecdotes'
+import { setNotification } from '../reducers/notificationReducer'
+
 const anecdotesAtStart = [
   'If it hurts, do it more often',
   'Adding manpower to a late software project makes it later!',
@@ -23,18 +26,41 @@ const sortByVotes = (anecdotes) => {
   return anecdotes.sort((item1, item2) => item2.votes - item1.votes)
 }
 
-export const createAnecdote = (content) => {
-  return {
-    type: 'NEW_ANECDOTE',
-    data: {
-      content: content,
-      id: getId(),
-      votes: 0,
-    }
+export const voteAnecdote = (anecdote) => {
+  return async dispatch => {
+    let response = await anecdoteService.updateVote(anecdote)
+    console.log('UpdateResponse: ', response)
+    dispatch({
+      type: 'VOTE',
+      id: response.id,
+    })
   }
 }
 
-const anecdoteReducer = (state = sortByVotes(initialState), action) => {
+export const createAnecdote = (content) => {
+  console.log('Anecdote: ', content)
+  return async dispatch => {
+    let newAnecdote =  await anecdoteService.createNew({ content: content, votes: 0}) 
+    dispatch({
+      type: 'NEW_ANECDOTE',
+      data: newAnecdote,
+    })    
+  }
+}
+
+  export const initializeAnecdotes = () => {
+    return async dispatch => {
+      const anecdotes = await anecdoteService.getAll()
+      console.log("GetResponse: ", anecdotes)
+      dispatch({
+        type: 'INIT_ANECDOTES',
+        data: anecdotes,
+      })
+    }
+  }
+
+
+const anecdoteReducer = (state = [], action) => {
   console.log('state now: ', state)
   console.log('action', action)
 
@@ -54,6 +80,11 @@ const anecdoteReducer = (state = sortByVotes(initialState), action) => {
       return sortByVotes(updatedAnecdotes)
     case 'NEW_ANECDOTE':
       return sortByVotes([...state, action.data])
+    case 'INIT_ANECDOTES':
+      console.log('Attemping to return initial state')
+      console.log('ActionData: ', action.data)
+      return action.data
+
     default:
       return state
   }
