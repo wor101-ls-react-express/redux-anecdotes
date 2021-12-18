@@ -26,7 +26,13 @@ const sortByVotes = (anecdotes) => {
   return anecdotes.sort((item1, item2) => item2.votes - item1.votes)
 }
 
+let notifictionTimeout = null
+
 export const voteAnecdote = (anecdote) => {
+  if (notifictionTimeout) {
+    clearTimeout(notifictionTimeout)
+  }
+
   return async dispatch => {
     let response = await anecdoteService.updateVote(anecdote)
     console.log('UpdateResponse: ', response)
@@ -38,11 +44,15 @@ export const voteAnecdote = (anecdote) => {
         votes: response.votes,
       }
     })
-    setTimeout(() => dispatch(clearNotification()), 5000)
+    notifictionTimeout = setTimeout(() => dispatch(clearNotification()), 5000)
   }
 }
 
 export const createAnecdote = (content) => {
+  if (notifictionTimeout) {
+    clearTimeout(notifictionTimeout)
+  }
+
   console.log('Anecdote: ', content)
   return async dispatch => {
     let newAnecdote =  await anecdoteService.createNew({ content: content, votes: 0}) 
@@ -50,7 +60,7 @@ export const createAnecdote = (content) => {
       type: 'NEW_ANECDOTE',
       data: newAnecdote,
     }) 
-    setTimeout(() => dispatch(clearNotification()), 5000)   
+    notifictionTimeout = setTimeout(() => dispatch(clearNotification()), 5000)  
   }
 }
 
