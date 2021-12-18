@@ -5,7 +5,7 @@ export const clearNotification = () => {
 const notificationReducer = ( state = null, action) => {
   switch (action.type) {
     case 'VOTE':
-      return `You voted for '${action.content}'`
+      return `You voted for '${action.data.content}'`
     case 'NEW_ANECDOTE':
       return `You created '${action.data.content}'`
     case 'CLEAR_NOTIFICATION':

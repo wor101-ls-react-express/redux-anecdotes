@@ -13,7 +13,6 @@ const NewAnecdote = (props) => {
     const content = event.target.anecdote.value
     event.target.anecdote.value = ''
     dispatch(createAnecdote(content))
-    setTimeout(() => dispatch(clearNotification()), 5000)
   }
 
   return (

@@ -1,4 +1,5 @@
 import anecdoteService from '../services/anecdotes'
+import { clearNotification } from '../reducers/notificationReducer'
 
 const anecdotesAtStart = [
   'If it hurts, do it more often',
@@ -31,10 +32,13 @@ export const voteAnecdote = (anecdote) => {
     console.log('UpdateResponse: ', response)
     dispatch({
       type: 'VOTE',
-      content: response.content,
-      id: response.id,
-      votes: response.votes,
+      data: {
+        content: response.content,
+        id: response.id,
+        votes: response.votes,
+      }
     })
+    setTimeout(() => dispatch(clearNotification()), 5000)
   }
 }
 
@@ -45,7 +49,8 @@ export const createAnecdote = (content) => {
     dispatch({
       type: 'NEW_ANECDOTE',
       data: newAnecdote,
-    })    
+    }) 
+    setTimeout(() => dispatch(clearNotification()), 5000)   
   }
 }
 
@@ -68,7 +73,7 @@ const anecdoteReducer = (state = [], action) => {
   switch (action.type) {
     case 'VOTE':
       let updatedAnecdotes = state.map(object => {
-        if (object.id === action.id) {
+        if (object.id === action.data.id) {
           let newObject = {
                 ...object,
                 votes: object.votes + 1,
